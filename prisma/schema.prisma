@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int @id @default(autoincrement())
+  accountType AccountType @default(FREE)
+  email    String @unique
+  password String
+  createdAt DateTime @default(now())
+  images Image[]
+  uploatedImage  Int @default(0)
+  transformedImage Int  @default(0)
+}
+
+model Image {
+  id            Int @id @default(autoincrement())
+  fileName      String   @unique()
+  path          String
+  uploadDate    DateTime @default(now())
+  ownerId       Int
+  owner         User  @relation(fields: [ownerId], references: [id])
+  tags          Tag[] 
+  categoryes    Category[]
+  versions      ImageVersion[]
+}
+
+enum AccountType {
+  FREE
+  PAID
+}
+
+model ImageVersion {
+  id        Int       @id @default(autoincrement())
+  imageId   Int
+  fileName  String
+  path      String
+  createAt  DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  image     Image     @relation(fields: [imageId], references: [id])
+}
+
+model Tag {
+  id      Int     @id @default(autoincrement())
+  name    String @unique()
+  images  Image[] 
+}
+
+model Category {
+  id      Int    @id @default(autoincrement())
+  name    String  @unique
+  images  Image[]
+}

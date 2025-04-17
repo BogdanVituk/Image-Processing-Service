@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `transformedImage` INTEGER NOT NULL DEFAULT 0,
+    ADD COLUMN `uploatedImage` INTEGER NOT NULL DEFAULT 0;
